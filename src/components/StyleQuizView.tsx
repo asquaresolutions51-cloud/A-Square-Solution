@@ -82,23 +82,38 @@ export default function StyleQuizView({ onNavigate }: StyleQuizViewProps) {
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone) {
       alert('Please fill out Name and Phone number to generate your detailed report.');
       return;
     }
 
+    const payload = {
+      name,
+      phone,
+      email,
+      area: areaSqFt,
+      quizAnswers: selectedAnswers,
+      matchedProfile: getQuizResultProfile().title,
+      source: 'Style Quiz Form'
+    };
+
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.error('Error submitting quiz lead data to API', err);
+    }
+
     // Save lead parameters locally in localstorage to show real integration
     const savedLeads = JSON.parse(localStorage.getItem('asquare_leads') || '[]');
     savedLeads.push({
       date: new Date().toISOString(),
-      name,
-      phone,
-      email,
-      areaSqFt,
-      answers: selectedAnswers,
-      profile: getQuizResultProfile().title
+      ...payload
     });
     localStorage.setItem('asquare_leads', JSON.stringify(savedLeads));
 

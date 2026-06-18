@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -110,15 +112,30 @@ export default function App() {
     sessionStorage.setItem('dismissed_asquare_popup', 'true');
   };
 
-  const handlePopupSubmit = (e: React.FormEvent) => {
+  const handlePopupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!popupEmail) return;
+
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: popupEmail,
+          source: 'Exit Intent Popup Newsletter'
+        })
+      });
+    } catch (err) {
+      console.error('Failed to submit popup email', err);
+    }
+
     setPopupSubmitted(true);
     setTimeout(() => {
       handleDismissPopup();
     }, 3000);
   };
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactName || !contactPhone) {
       alert('Please fill out Name and Phone number to register your enquiry.');
@@ -126,28 +143,42 @@ export default function App() {
     }
 
     setContactStatus('loading');
-    setTimeout(() => {
-      // Save client lead inside localstorage
-      const savedEnquiries = JSON.parse(localStorage.getItem('asquare_enquiries') || '[]');
-      savedEnquiries.push({
-        date: new Date().toISOString(),
-        name: contactName,
-        phone: contactPhone,
-        email: contactEmail,
-        area: contactArea,
-        budget: contactBudget,
-        message: contactMessage,
-      });
-      localStorage.setItem('asquare_enquiries', JSON.stringify(savedEnquiries));
 
-      setContactStatus('success');
-      // Reset inputs
-      setContactName('');
-      setContactPhone('');
-      setContactEmail('');
-      setContactArea('');
-      setContactMessage('');
-    }, 1500);
+    const payload = {
+      name: contactName,
+      phone: contactPhone,
+      email: contactEmail,
+      area: contactArea,
+      budget: contactBudget,
+      message: contactMessage,
+      source: 'Contact Form (Main)'
+    };
+
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.error('Error submitting form data to API', err);
+    }
+
+    // Save client lead inside localstorage
+    const savedEnquiries = JSON.parse(localStorage.getItem('asquare_enquiries') || '[]');
+    savedEnquiries.push({
+      date: new Date().toISOString(),
+      ...payload
+    });
+    localStorage.setItem('asquare_enquiries', JSON.stringify(savedEnquiries));
+
+    setContactStatus('success');
+    // Reset inputs
+    setContactName('');
+    setContactPhone('');
+    setContactEmail('');
+    setContactArea('');
+    setContactMessage('');
   };
 
   const handleNavigate = (pageId: string) => {
