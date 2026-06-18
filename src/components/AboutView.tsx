@@ -32,15 +32,15 @@ export default function AboutView({ onNavigate }: AboutViewProps) {
 
   const founders = [
     {
-      name: 'Amit Verma',
+      name: 'Ayush Awasthi',
       role: 'Principal Architectural Designer & Founder',
-      desc: 'With over 12 years of luxury residential execution under his belt, Amit fuses Rajasthani temple geometry with sleek European functional architecture.',
+      desc: 'With over 12 years of luxury residential execution under his belt, Ayush fuses Rajasthani temple geometry with sleek European functional architecture.',
       img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
     },
     {
-      name: 'Siddharth Meena',
-      role: 'Lead Project Executions Head',
-      desc: 'Siddharth monitors the day-to-day carpentry, civil layout modification alignment, and ensures timeline delivery within our Mansarovar facility.',
+      name: 'Piyush Awasthi',
+      role: 'Lead Project Executions Head & Co-Founder',
+      desc: 'Piyush monitors the day-to-day carpentry, civil layout modification alignment, and ensures timeline delivery within our Mansarovar facility.',
       img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
     },
   ];

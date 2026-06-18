@@ -89,7 +89,7 @@ export default function App() {
       name: 'Sunil Verma',
       location: 'Mansarovar, Jaipur',
       project: 'Boutique Clinic Setup',
-      quote: '"We required an eye-friendly, acoustical workspace setup for outpatients. Amit & Siddharth planned directional zones matching Vastu earth axis. Patients often comment on the extremely calm atmosphere of our cabins."',
+      quote: '"We required an eye-friendly, acoustical workspace setup for outpatients. Ayush & Piyush planned directional zones matching Vastu earth axis. Patients often comment on the extremely calm atmosphere of our cabins."',
       rating: 5,
       avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80'
     }
@@ -727,7 +727,7 @@ export default function App() {
                   </div>
 
                   <p className="text-sm text-stone-300 leading-relaxed mb-10 font-light max-w-lg mx-auto">
-                    Contact Siddharth and Amit Verma directly to book a site measurement in Vaishali Nagar, Mansarovar, C-Scheme, or Malviya Nagar. We'll lock down static pricing estimates free of cost.
+                    Contact Ayush and Piyush Awasthi directly to book a site measurement in Vaishali Nagar, Mansarovar, C-Scheme, or Malviya Nagar. We'll lock down static pricing estimates free of cost.
                   </p>
                   
                   <div className="flex flex-wrap justify-center gap-6">
@@ -865,7 +865,7 @@ export default function App() {
                   Book Free Design Consultation
                 </h1>
                 <p className="text-xs text-gray-500 mt-2">
-                  Drop us an entry. Tell us about your carpet scale, preferred timelines, and budget limit. amit & Siddharth Verma will call back within 12 hours.
+                  Drop us an entry. Tell us about your carpet scale, preferred timelines, and budget limit. Ayush & Piyush Awasthi will call back within 12 hours.
                 </p>
                 <div className="h-1 w-20 bg-brand-gold mx-auto mt-4" />
               </div>
@@ -1055,7 +1055,7 @@ export default function App() {
                         ) : contactStatus === 'success' ? (
                           <div className="p-3 text-green-800 bg-green-50 border border-green-200 text-xs font-mono font-semibold rounded flex items-center gap-2">
                             <Check className="w-5 h-5 text-green-600 font-bold" />
-                            Success! Your details are stored safely.amit Verma will call back.
+                            Success! Your details are stored safely. Ayush Awasthi will call back.
                           </div>
                         ) : (
                           <button
