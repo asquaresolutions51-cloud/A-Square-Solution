@@ -22,7 +22,9 @@ import {
   ChevronLeft,
   ArrowRight,
   Map,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Home,
+  Briefcase
 } from 'lucide-react';
 
 // Import datasets
@@ -48,6 +50,7 @@ import CustomFurnitureCustomizer from './components/CustomFurnitureCustomizer';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<string>('home');
+  const [selectedServiceId, setSelectedServiceId] = useState<string | undefined>(undefined);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [contactName, setContactName] = useState('');
   const [contactPhone, setContactPhone] = useState('');
@@ -181,8 +184,9 @@ export default function App() {
     setContactMessage('');
   };
 
-  const handleNavigate = (pageId: string) => {
+  const handleNavigate = (pageId: string, serviceId?: string) => {
     setCurrentPage(pageId);
+    setSelectedServiceId(serviceId);
     setMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -206,49 +210,201 @@ export default function App() {
 
       {/* Sticky Header Top Navigation */}
       <header className="sticky top-0 z-40 bg-white/50 backdrop-blur-sm border-b border-brand-beige h-20 flex items-center">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative">
           <div className="flex items-center justify-between">
             
             {/* Logo/Identity */}
             <div 
               onClick={() => handleNavigate('home')} 
-              className="flex items-center gap-3 cursor-pointer select-none group"
+              className="flex items-center cursor-pointer select-none"
             >
-              <div className="w-10 h-10 bg-brand-charcoal hover:bg-brand-gold text-brand-ivory hover:text-brand-charcoal rounded-none flex items-center justify-center font-serif font-black text-xl border-2 border-brand-gold transition-all duration-300">
-                A²
-              </div>
-              <div>
-                <span className="text-xl md:text-2xl font-serif font-black tracking-tighter text-brand-charcoal group-hover:text-brand-pink transition-colors block leading-none">
-                  A Square Solution
-                </span>
-                <span className="text-[10px] font-mono tracking-[0.3em] text-brand-gold block mt-1 uppercase opacity-80">
-                  Heritage • Interiors • Custom Wood
-                </span>
-              </div>
+              <img 
+                src="/Asquaresolutionlogo.svg" 
+                alt="A Square Solution Logo" 
+                className="h-10 md:h-12 w-auto object-contain"
+              />
             </div>
-
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-widest">
-              {NAV_ITEMS.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavigate(item.id)}
-                  className={`py-1.5 transition-all duration-300 cursor-pointer ${
-                    currentPage === item.id 
-                      ? 'text-brand-pink border-b border-brand-pink' 
-                      : 'text-brand-charcoal/80 hover:text-brand-pink'
-                  }`}
-                >
-                  {item.label}
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-[10px] xl:text-[11px] font-semibold uppercase tracking-widest">
+              <button
+                onClick={() => handleNavigate('home')}
+                className={`py-1.5 transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'home' 
+                    ? 'text-brand-pink border-b border-brand-pink' 
+                    : 'text-brand-charcoal/80 hover:text-brand-pink'
+                }`}
+              >
+                Home
+              </button>
+
+              <button
+                onClick={() => handleNavigate('about')}
+                className={`py-1.5 transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'about' 
+                    ? 'text-brand-pink border-b border-brand-pink' 
+                    : 'text-brand-charcoal/80 hover:text-brand-pink'
+                }`}
+              >
+                About Studio
+              </button>
+
+              {/* Design Services Mega Menu */}
+              <div className="relative group/mega py-5">
+                <button className="flex items-center gap-1 py-1.5 transition-all duration-300 cursor-pointer whitespace-nowrap text-brand-charcoal/80 hover:text-brand-pink">
+                  <span>Design Services</span>
+                  <ChevronRight className="w-3.5 h-3.5 rotate-90" />
                 </button>
-              ))}
+
+                {/* Full Width Mega Menu Panel */}
+                <div className="absolute top-[60px] left-1/2 -translate-x-1/2 w-[90vw] max-w-5xl bg-white/95 backdrop-blur-md shadow-2xl border border-brand-beige p-8 transition-all duration-300 opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible pointer-events-none group-hover/mega:pointer-events-auto z-50 grid grid-cols-12 gap-8 text-left rounded-none">
+                  {/* Left Side: Highlighted Theme Card */}
+                  <div className="col-span-4 bg-brand-charcoal text-brand-ivory p-6 border-l-4 border-brand-gold relative overflow-hidden flex flex-col justify-between">
+                    <div className="absolute inset-0 opacity-10 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=400&q=80')" }} />
+                    <div className="relative z-10">
+                      <span className="text-[9px] font-mono text-brand-gold tracking-widest uppercase block mb-1">SIGNATURE STYLE</span>
+                      <h4 className="font-serif font-black text-lg text-white mb-2 leading-tight">Jaipur Modern Heritage</h4>
+                      <p className="text-[11px] text-stone-300 leading-relaxed font-light">
+                        Integrating classical Rajasthani spatial geometry, sandstone textures, and Jali partitions into clean contemporary layouts.
+                      </p>
+                    </div>
+                    <button 
+                      onClick={() => handleNavigate('portfolio')}
+                      className="relative z-10 text-[10px] font-mono font-bold text-brand-gold hover:text-brand-pink transition-colors uppercase tracking-wider text-left mt-6 flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <span>View Case Studies</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Right Side: Grid of 6 Services */}
+                  <div className="col-span-8 grid grid-cols-2 gap-x-8 gap-y-6">
+                    {SERVICES_CATALOG.map((service) => {
+                      let IconComponent = Hammer;
+                      if (service.icon === 'ChefHat') IconComponent = ChefHat;
+                      else if (service.icon === 'Armchair') IconComponent = Armchair;
+                      else if (service.icon === 'Home') IconComponent = Home;
+                      else if (service.icon === 'Briefcase') IconComponent = Briefcase;
+                      else if (service.icon === 'Compass') IconComponent = Compass;
+
+                      return (
+                        <div 
+                          key={service.id}
+                          onClick={() => handleNavigate('services', service.id)}
+                          className="flex items-start gap-4 cursor-pointer group/item hover:translate-x-0.5 transition-transform"
+                        >
+                          <div className="w-10 h-10 bg-brand-ivory text-brand-terracotta flex items-center justify-center shrink-0 border border-brand-beige group-hover/item:bg-brand-pink/10 group-hover/item:text-brand-pink transition-colors">
+                            <IconComponent className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h5 className="font-serif font-black text-sm text-brand-charcoal group-hover/item:text-brand-terracotta transition-colors leading-tight mb-1">
+                              {service.title}
+                            </h5>
+                            <p className="text-[11px] text-gray-500 font-light leading-snug">
+                              {service.description.substring(0, 70)}...
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Interactive Tools Dropdown */}
+              <div className="relative group/tools py-5">
+                <button className="flex items-center gap-1 py-1.5 transition-all duration-300 cursor-pointer whitespace-nowrap text-brand-charcoal/80 hover:text-brand-pink">
+                  <span>Interactive Tools</span>
+                  <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+                </button>
+
+                {/* Floating Dropdown Card */}
+                <div className="absolute top-[60px] left-0 w-72 bg-white/95 backdrop-blur-md shadow-2xl border border-brand-beige p-5 transition-all duration-300 opacity-0 invisible group-hover/tools:opacity-100 group-hover/tools:visible pointer-events-none group-hover/tools:pointer-events-auto z-50 flex flex-col gap-4 text-left">
+                  <div 
+                    onClick={() => handleNavigate('quiz')}
+                    className="flex items-start gap-3.5 cursor-pointer group/tool hover:translate-x-0.5 transition-transform"
+                  >
+                    <div className="w-8 h-8 bg-brand-pink/10 text-brand-pink flex items-center justify-center shrink-0 border border-brand-pink/15">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h5 className="font-sans font-bold text-xs text-brand-charcoal group-hover/tool:text-brand-pink transition-colors uppercase tracking-wider mb-0.5">
+                        Design Style Quiz
+                      </h5>
+                      <p className="text-[10px] text-gray-500 leading-normal font-light">
+                        Find your heritage blueprint & budget projections in 90s.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div 
+                    onClick={() => handleNavigate('vastu')}
+                    className="flex items-start gap-3.5 cursor-pointer group/tool hover:translate-x-0.5 transition-transform"
+                  >
+                    <div className="w-8 h-8 bg-brand-gold/10 text-brand-gold flex items-center justify-center shrink-0 border border-brand-gold/15">
+                      <Compass className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h5 className="font-sans font-bold text-xs text-brand-charcoal group-hover/tool:text-brand-gold transition-colors uppercase tracking-wider mb-0.5">
+                        Vastu Floorplan
+                      </h5>
+                      <p className="text-[10px] text-gray-500 leading-normal font-light">
+                        Interactive compass zones and layout alignment guidelines.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => handleNavigate('portfolio')}
+                className={`py-1.5 transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'portfolio' 
+                    ? 'text-brand-pink border-b border-brand-pink' 
+                    : 'text-brand-charcoal/80 hover:text-brand-pink'
+                }`}
+              >
+                Portfolio
+              </button>
+
+              <button
+                onClick={() => handleNavigate('process')}
+                className={`py-1.5 transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'process' 
+                    ? 'text-brand-pink border-b border-brand-pink' 
+                    : 'text-brand-charcoal/80 hover:text-brand-pink'
+                }`}
+              >
+                Process
+              </button>
+
+              <button
+                onClick={() => handleNavigate('pricing')}
+                className={`py-1.5 transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'pricing' 
+                    ? 'text-brand-pink border-b border-brand-pink' 
+                    : 'text-brand-charcoal/80 hover:text-brand-pink'
+                }`}
+              >
+                Pricing
+              </button>
+
+              <button
+                onClick={() => handleNavigate('blog')}
+                className={`py-1.5 transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'blog' 
+                    ? 'text-brand-pink border-b border-brand-pink' 
+                    : 'text-brand-charcoal/80 hover:text-brand-pink'
+                }`}
+              >
+                Guides & Blog
+              </button>
             </nav>
 
             {/* Action Consult Button desktop */}
             <div className="hidden lg:block">
               <button
                 onClick={() => handleNavigate('contact')}
-                className="px-6 py-2.5 bg-brand-charcoal text-white hover:bg-brand-pink text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 rounded-none shadow-sm cursor-pointer"
+                className="px-5 py-2.5 bg-brand-charcoal text-white hover:bg-brand-pink text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 rounded-none shadow-sm cursor-pointer whitespace-nowrap"
                 id="header-action-button"
               >
                 Book consultation
@@ -605,7 +761,7 @@ export default function App() {
 
         {/* VIEW: SERVICES DETAILED CATALOG */}
         {currentPage === 'services' && (
-          <ServicesView onNavigate={handleNavigate} />
+          <ServicesView onNavigate={handleNavigate} selectedServiceId={selectedServiceId} />
         )}
 
         {/* VIEW: PORTFOLIO SHOWCASE */}
@@ -950,18 +1106,16 @@ export default function App() {
             
             {/* Identity column */}
             <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 bg-brand-gold text-brand-charcoal font-serif font-black flex items-center justify-center text-lg">
-                  A²
-                </div>
-                <div>
-                  <span className="text-md font-serif font-black text-white uppercase block leading-none">
-                    A Square Solution
-                  </span>
-                  <span className="text-[9px] font-mono tracking-widest text-brand-gold uppercase block mt-1">
-                    Premium Jaipur Interiors
-                  </span>
-                </div>
+              <div 
+                onClick={() => handleNavigate('home')}
+                className="flex items-center cursor-pointer mb-2"
+              >
+                <img 
+                  src="/Asquaresolutionlogo.svg" 
+                  alt="A Square Solution Logo" 
+                  className="h-9 w-auto object-contain"
+                  style={{ filter: 'invert(1)' }}
+                />
               </div>
               <p className="text-xs text-stone-400 leading-relaxed">
                 Handcrafting premium residential and boutique workspaces in Jaipur based on the traditional "Jaipur Modern Heritage" geometry pattern.
