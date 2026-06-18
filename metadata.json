@@ -1,0 +1,6 @@
+{
+  "name": "A Square Solution",
+  "description": "Bespoke luxury interior design in Jaipur under the 'Jaipur Modern Heritage' theme, blending traditional Rajasthani architectural styling with sleek modern living.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
