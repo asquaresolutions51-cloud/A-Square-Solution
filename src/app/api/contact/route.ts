@@ -26,9 +26,12 @@ export async function POST(request: Request) {
     });
 
     let mailSent = false;
-    let responseMessage = 'Lead saved successfully.';
+    let responseMessage = '';
 
-    if (smtpUser && smtpPass) {
+    // Check if SMTP is fully configured and not using placeholder password
+    const hasSmtpConfig = smtpUser && smtpPass && smtpPass !== 'your-gmail-app-password';
+
+    if (hasSmtpConfig) {
       // Create Nodemailer Transporter
       const transporter = nodemailer.createTransport({
         host: smtpHost,
@@ -125,9 +128,41 @@ export async function POST(request: Request) {
       });
 
       mailSent = true;
-      responseMessage = 'Email notification sent successfully.';
+      responseMessage = 'Email notification sent successfully via Nodemailer.';
     } else {
-      responseMessage = 'Lead logged on server console. (Configure SMTP_USER and SMTP_PASS in .env.local to send emails)';
+      // Fallback: Use FormSubmit to send email directly without SMTP server config
+      console.log('SMTP not configured or placeholder detected. Routing through FormSubmit service...');
+      
+      const formSubmitUrl = `https://formsubmit.co/ajax/${targetEmail}`;
+      const payload = {
+        Name: name || 'N/A',
+        Phone: phone || 'N/A',
+        Email: email || 'N/A',
+        AreaSqFt: area || 'N/A',
+        Budget: budget || 'N/A',
+        Message: message || 'N/A',
+        MatchedProfile: matchedProfile || 'N/A',
+        QuizAnswers: quizAnswers ? JSON.stringify(quizAnswers) : 'N/A',
+        _subject: `[A Square Solution Lead] ${name || 'New Lead'} - ${source || 'Contact Form'}`
+      };
+
+      const response = await fetch(formSubmitUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        mailSent = true;
+        responseMessage = 'Email notification sent successfully via FormSubmit (First submission requires verification email check).';
+      } else {
+        const errorText = await response.text();
+        console.error('FormSubmit API failed:', errorText);
+        responseMessage = 'Lead logged on server console, email dispatch failed.';
+      }
     }
 
     return NextResponse.json({ success: true, mailSent, message: responseMessage });
